@@ -1,0 +1,1315 @@
+<!DOCTYPE html>
+<html lang="vi" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ngân hàng câu hỏi ôn tập Tin học đại cương (Lesson 1 - 12)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+          colors: {
+            brand: {
+              50: '#eff6ff',
+              100: '#dbeafe',
+              500: '#3b82f6',
+              600: '#2563eb',
+              700: '#1d4ed8',
+              900: '#1e3a8a',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    /* Tùy chỉnh thanh cuộn & hiệu ứng highlight tìm kiếm */
+    ::-webkit-scrollbar {
+      width: 7px;
+      height: 7px;
+    }
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(148, 163, 184, 0.5);
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(100, 116, 139, 0.8);
+    }
+    mark.search-hl {
+      background-color: #fde047;
+      color: #0f172a;
+      padding: 1px 3px;
+      border-radius: 4px;
+      font-weight: 600;
+    }
+    mark.search-hl.active-match {
+      background-color: #fb923c;
+      color: #ffffff;
+      box-shadow: 0 0 0 2px rgba(251, 146, 60, 0.45);
+    }
+    .card-flash {
+      animation: pulseRing 1.4s ease-out;
+    }
+    @keyframes pulseRing {
+      0% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.65); }
+      70% { box-shadow: 0 0 0 10px rgba(59, 130, 246, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0); }
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 dark:bg-slate-950 dark:text-slate-100 transition-colors duration-200 antialiased">
+
+  <!-- ================= STICKY HEADER & SMART SEARCH BAR ================= -->
+  <header class="sticky top-0 z-40 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 shadow-sm">
+    <div class="max-w-7xl mx-auto px-3 sm:px-6 py-2.5 flex flex-wrap items-center justify-between gap-2.5">
+      
+      <!-- Left: Mobile Drawer Button & Brand Title -->
+      <div class="flex items-center gap-2.5">
+        <button id="mobileMenuBtn" type="button" aria-label="Mở mục lục" class="lg:hidden p-2 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 transition">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h10"/></svg>
+        </button>
+        <a href="#top" class="flex items-center gap-2.5 group">
+          <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-blue-600 to-indigo-600 flex items-center justify-center text-white font-bold shadow-sm">
+            CS
+          </div>
+          <div class="hidden sm:block">
+            <h1 class="text-sm sm:text-base font-bold leading-tight text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition">
+              Ôn tập Tin học đại cương
+            </h1>
+            <p class="text-[11px] text-slate-500 dark:text-slate-400">12 Lessons • 33 Câu hỏi & Lời giải chi tiết</p>
+          </div>
+        </a>
+      </div>
+
+      <!-- Center: Smart Auto-Scroll Search Input -->
+      <div class="relative flex-1 max-w-2xl order-3 md:order-2 w-full md:w-auto">
+        <div class="relative flex items-center">
+          <span class="absolute left-3.5 text-slate-400 pointer-events-none">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+          </span>
+          <input
+            id="searchInput"
+            type="text"
+            autocomplete="off"
+            placeholder="Nhập từ khóa (VD: RAM, IPv6, RGB, SQL, Agile, Hallucination...) — Tự cuộn ngay tới phần khớp"
+            class="w-full pl-10 pr-36 py-2 text-sm rounded-xl bg-slate-100/90 dark:bg-slate-800/90 border border-slate-200 dark:border-slate-700 focus:bg-white dark:focus:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500 transition placeholder:text-slate-400 dark:placeholder:text-slate-500"
+          />
+
+          <!-- Match Counter & Prev/Next Controls -->
+          <div id="searchControls" class="hidden absolute right-2 flex items-center gap-1 bg-white dark:bg-slate-900 px-1.5 py-0.5 rounded-lg border border-slate-200 dark:border-slate-700 shadow-xs">
+            <span id="matchCounter" class="text-xs font-semibold text-blue-600 dark:text-blue-400 px-1.5 tabular-nums">0/0</span>
+            <button id="prevMatchBtn" type="button" title="Kết quả trước (Shift + Enter)" class="p-1 rounded hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"/></svg>
+            </button>
+            <button id="nextMatchBtn" type="button" title="Kết quả tiếp theo (Enter)" class="p-1 rounded hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            </button>
+            <button id="clearSearchBtn" type="button" title="Xóa tìm kiếm" class="p-1 rounded hover:bg-red-50 dark:hover:bg-red-950/50 text-slate-400 hover:text-red-500">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Autocomplete Dropdown -->
+        <div id="searchDropdown" class="hidden absolute left-0 right-0 mt-1.5 max-h-80 overflow-y-auto rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 shadow-xl z-50 divide-y divide-slate-100 dark:divide-slate-800">
+          <!-- Dynamic dropdown items injected by JS -->
+        </div>
+      </div>
+
+      <!-- Right: Action Buttons (Toggle Solutions, Dark Mode) -->
+      <div class="flex items-center gap-1.5 sm:gap-2 order-2 md:order-3">
+        <button id="toggleAllSolutionsBtn" type="button" class="px-3 py-2 text-xs font-semibold rounded-xl bg-blue-50 hover:bg-blue-100 text-blue-700 dark:bg-blue-950/70 dark:hover:bg-blue-900/70 dark:text-blue-300 border border-blue-200/70 dark:border-blue-800/70 transition flex items-center gap-1.5">
+          <svg id="eyeIcon" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"/></svg>
+          <span id="toggleAllLabel">Ẩn lời giải</span>
+        </button>
+
+        <button id="themeToggleBtn" type="button" aria-label="Đổi giao diện Sáng/Tối" class="p-2 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 transition">
+          <!-- Sun icon (shown in dark mode) -->
+          <svg class="w-4 h-4 hidden dark:block text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+          <!-- Moon icon (shown in light mode) -->
+          <svg class="w-4 h-4 block dark:hidden text-slate-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ================= MOBILE DRAWER BACKDROP ================= -->
+  <div id="drawerBackdrop" class="fixed inset-0 bg-slate-900/50 backdrop-blur-xs z-40 hidden lg:hidden"></div>
+
+  <!-- ================= MAIN LAYOUT (SIDEBAR + CONTENT) ================= -->
+  <div id="top" class="max-w-7xl mx-auto px-3 sm:px-6 py-6 flex gap-6 items-start">
+
+    <!-- LEFT SIDEBAR: TABLE OF CONTENTS (12 LESSONS & SUB-QUESTIONS) -->
+    <aside id="sidebarDrawer" class="fixed inset-y-0 left-0 z-50 w-80 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 transform -translate-x-full transition-transform duration-200 ease-in-out lg:translate-x-0 lg:sticky lg:top-20 lg:z-10 lg:w-80 lg:h-[calc(100vh-6rem)] lg:rounded-2xl lg:border lg:shadow-xs flex flex-col">
+      <div class="p-4 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
+        <div>
+          <span class="text-xs font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400">Mục lục bài học</span>
+          <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Nhấn vào mục để cuộn nhanh</p>
+        </div>
+        <button id="closeDrawerBtn" type="button" class="lg:hidden p-1.5 rounded-lg text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+      <nav id="tocNav" class="flex-1 overflow-y-auto p-3 space-y-2 text-sm">
+        <!-- Populated automatically via JS from content data -->
+      </nav>
+    </aside>
+
+    <!-- RIGHT MAIN CONTENT AREA -->
+    <main class="flex-1 min-w-0 space-y-8">
+
+      <!-- Hero Banner -->
+      <section class="rounded-2xl bg-gradient-to-br from-blue-600 via-indigo-600 to-slate-900 text-white p-6 sm:p-8 shadow-md relative overflow-hidden">
+        <div class="relative z-10 max-w-3xl">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/15 backdrop-blur-xs text-xs font-medium mb-3">
+            <span>Tài liệu ôn tập chuẩn hóa</span>
+            <span>•</span>
+            <span>SWE101x / Tin học đại cương</span>
+          </div>
+          <h2 class="text-2xl sm:text-3xl font-extrabold tracking-tight mb-2">
+            Ngân hàng câu hỏi ôn tập Tin học đại cương
+          </h2>
+          <p class="text-blue-100 text-sm sm:text-base leading-relaxed">
+            Hệ thống đầy đủ 12 bài học từ phần cứng máy tính, mạng Internet, cơ sở dữ liệu, lập trình JavaScript, xử lý ảnh số đến Trí tuệ nhân tạo (AI). Gõ từ khóa vào thanh tìm kiếm phía trên để nhảy thẳng tới phần kiến thức bạn cần.
+          </p>
+          <!-- Quick Tag Pills -->
+          <div class="mt-4 flex flex-wrap gap-2 text-xs">
+            <span class="text-blue-200 py-1 font-medium">Tra cứu nhanh:</span>
+            <button type="button" data-quick-search="RAM" class="quick-pill px-2.5 py-1 rounded-lg bg-white/15 hover:bg-white/25 transition">RAM & Ổ cứng</button>
+            <button type="button" data-quick-search="IPv6" class="quick-pill px-2.5 py-1 rounded-lg bg-white/15 hover:bg-white/25 transition">IPv4 / IPv6</button>
+            <button type="button" data-quick-search="SimpleImage" class="quick-pill px-2.5 py-1 rounded-lg bg-white/15 hover:bg-white/25 transition">Xử lý ảnh RGB</button>
+            <button type="button" data-quick-search="GROUP BY" class="quick-pill px-2.5 py-1 rounded-lg bg-white/15 hover:bg-white/25 transition">Lệnh SQL</button>
+            <button type="button" data-quick-search="Agile" class="quick-pill px-2.5 py-1 rounded-lg bg-white/15 hover:bg-white/25 transition">Waterfall vs Agile</button>
+            <button type="button" data-quick-search="Hallucination" class="quick-pill px-2.5 py-1 rounded-lg bg-white/15 hover:bg-white/25 transition">Ảo giác AI</button>
+          </div>
+        </div>
+        <div class="absolute -right-10 -bottom-12 w-56 h-56 rounded-full bg-white/10 blur-2xl pointer-events-none"></div>
+      </section>
+
+      <!-- Container where all 12 Lessons and 33 Questions are rendered -->
+      <div id="lessonsContainer" class="space-y-10"></div>
+
+    </main>
+  </div>
+
+  <!-- Floating Scroll To Top Button -->
+  <button id="scrollTopBtn" type="button" title="Cuộn lên đầu trang" class="fixed bottom-6 right-6 z-30 p-3 rounded-full bg-blue-600 hover:bg-blue-700 text-white shadow-lg opacity-0 pointer-events-none transition-all duration-200">
+    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"/></svg>
+  </button>
+
+  <!-- Toast Notification for Copy Code -->
+  <div id="toast" class="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 px-4 py-2.5 rounded-xl bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 text-xs font-semibold shadow-xl opacity-0 pointer-events-none transition-opacity duration-200">
+    Đã sao chép mã nguồn vào bộ nhớ tạm!
+  </div>
+
+  <!-- ================= COMPLETE DATASET & APPLICATION LOGIC ================= -->
+  <script>
+    // Dữ liệu đầy đủ 100% từ tài liệu PDF "Ngân hàng câu hỏi ôn tập Tin học đại cương"
+    const COURSE_DATA = [
+      {
+        id: "lesson-1",
+        lessonNum: "Lesson 1",
+        title: "Phần cứng máy tính",
+        questions: [
+          {
+            id: "l1-q1",
+            title: "Thiết bị đầu vào, đầu ra và lưu trữ",
+            prompt: "Phân loại các thiết bị sau thành thiết bị đầu vào, đầu ra hoặc lưu trữ: bàn phím, màn hình, ổ SSD, máy in, chuột, USB, loa, webcam. Giải thích sự khác biệt giữa ba nhóm này.",
+            knowledge: [
+              "<strong>Thiết bị đầu vào (Input):</strong> đưa dữ liệu/lệnh từ người dùng hoặc môi trường vào máy tính.",
+              "<strong>Thiết bị đầu ra (Output):</strong> đưa kết quả xử lý từ máy tính ra cho người dùng.",
+              "<strong>Thiết bị lưu trữ (Storage):</strong> giữ dữ liệu lâu dài, vừa đọc vừa ghi (có thể xem như vừa vào vừa ra)."
+            ],
+            answer: [
+              "<strong>Đầu vào:</strong> bàn phím, chuột, webcam.",
+              "<strong>Đầu ra:</strong> màn hình, máy in, loa.",
+              "<strong>Lưu trữ:</strong> ổ SSD, USB."
+            ]
+          },
+          {
+            id: "l1-q2",
+            title: "Các thành phần cơ bản của hệ thống máy tính",
+            prompt: "Một hệ thống máy tính gồm những thành phần cơ bản nào? Nêu vai trò của từng thành phần.",
+            knowledge: [
+              "<strong>Phần cứng (Hardware):</strong> các thiết bị vật lý.",
+              "<strong>Phần mềm (Software):</strong> chương trình điều khiển phần cứng và phục vụ người dùng (hệ điều hành, phần mềm ứng dụng).",
+              "<strong>Dữ liệu:</strong> đối tượng được máy tính xử lý.",
+              "<strong>Con người:</strong> người sử dụng, quản trị, phát triển hệ thống.",
+              "<em>Lưu ý:</em> Phần cứng và phần mềm phải phối hợp thì máy mới hoạt động được."
+            ]
+          },
+          {
+            id: "l1-q3",
+            title: "Khái niệm và vai trò của phần cứng",
+            prompt: "Nêu chức năng của CPU, RAM, ổ cứng, bo mạch chủ. Vì sao tắt máy thì dữ liệu trong RAM bị mất còn dữ liệu trong ổ cứng thì không?",
+            knowledge: [
+              "<strong>CPU:</strong> xử lý lệnh, tính toán, điều khiển hoạt động của máy.",
+              "<strong>RAM:</strong> bộ nhớ tạm, truy cập rất nhanh, chứa chương trình và dữ liệu đang chạy.",
+              "<strong>Ổ cứng (HDD/SSD):</strong> lưu trữ lâu dài hệ điều hành, phần mềm, tệp dữ liệu.",
+              "<strong>Bo mạch chủ:</strong> kết nối và truyền tín hiệu giữa các linh kiện."
+            ],
+            answer: [
+              "<strong>Giải thích:</strong> RAM là bộ nhớ khả biến (cần điện để giữ dữ liệu), còn ổ cứng là bộ nhớ không khả biến (giữ dữ liệu khi mất điện)."
+            ]
+          }
+        ]
+      },
+      {
+        id: "lesson-2",
+        lessonNum: "Lesson 2",
+        title: "Dữ liệu và thông tin",
+        questions: [
+          {
+            id: "l2-q1",
+            title: "Dữ liệu và thông tin",
+            prompt: "Phân biệt dữ liệu và thông tin. Cho ví dụ: dãy số 7, 8, 9, 6 trở thành thông tin trong tình huống nào?",
+            knowledge: [
+              "<strong>Giống nhau:</strong> đều phản ánh sự vật, hiện tượng; đều có thể lưu trữ, truyền đi và xử lý trên máy tính.",
+              "<strong>Khác nhau — Dữ liệu:</strong> là các giá trị thô (số, chữ, hình ảnh...), chưa có ngữ cảnh.",
+              "<strong>Khác nhau — Thông tin:</strong> là dữ liệu đã được xử lý, đặt trong ngữ cảnh và có ý nghĩa với người dùng."
+            ],
+            answer: [
+              "<code>7, 8, 9, 6</code> chỉ là dữ liệu. Khi biết đó là điểm bốn môn của một sinh viên và tính ra <strong>\"điểm trung bình là 7,5\"</strong> thì đó là thông tin."
+            ]
+          }
+        ]
+      },
+      {
+        id: "lesson-3",
+        lessonNum: "Lesson 3",
+        title: "Mạng máy tính và Internet",
+        questions: [
+          {
+            id: "l3-q1",
+            title: "Ứng dụng của CNTT và mạng để tạo trang web cá nhân",
+            prompt: "Mô tả các bước và công nghệ cần có để tạo một trang web cá nhân và đưa lên Internet.",
+            knowledge: [
+              "<strong>Bước 1:</strong> Thiết kế nội dung và giao diện bằng <strong>HTML</strong> (cấu trúc), <strong>CSS</strong> (trình bày), <strong>JavaScript</strong> (tương tác).",
+              "<strong>Bước 2:</strong> Đưa trang web lên một máy chủ web (web server) hoặc dịch vụ lưu trữ (hosting).",
+              "<strong>Bước 3:</strong> Gắn tên miền (domain) để người dùng truy cập dễ nhớ.",
+              "<strong>Bước 4:</strong> Trình duyệt gửi yêu cầu qua mạng Internet đến máy chủ, máy chủ trả về trang web để hiển thị.",
+              "Như vậy trang web cá nhân là sự kết hợp giữa công nghệ thông tin (tạo nội dung) và mạng (phân phối nội dung)."
+            ]
+          },
+          {
+            id: "l3-q2",
+            title: "Cấu trúc của một mạng máy tính",
+            prompt: "Một mạng máy tính gồm những thành phần nào? Kể tên các kiểu kết nối (topology) phổ biến.",
+            knowledge: [
+              "<strong>Thành phần:</strong> các thiết bị đầu cuối (máy tính, điện thoại, máy in...), thiết bị kết nối (switch, router, modem, access point), môi trường truyền dẫn (cáp, sóng Wi-Fi), giao thức mạng.",
+              "<strong>Topology phổ biến:</strong> bus, ring (vòng), star (hình sao), mesh (lưới). <strong>Hình sao (Star)</strong> là kiểu phổ biến nhất ở mạng cục bộ hiện nay."
+            ]
+          },
+          {
+            id: "l3-q3",
+            title: "Khái niệm và chức năng của các loại mạng",
+            prompt: "Phân biệt mạng LAN, MAN, WAN theo phạm vi địa lý. Mỗi loại cho một ví dụ.",
+            knowledge: [
+              "<strong>LAN:</strong> phạm vi nhỏ (phòng, tòa nhà). Ví dụ: mạng Wi-Fi trong nhà, phòng máy của trường.",
+              "<strong>MAN:</strong> phạm vi thành phố hoặc khu vực. Ví dụ: mạng cáp quang kết nối các chi nhánh ngân hàng trong một thành phố.",
+              "<strong>WAN:</strong> phạm vi rộng (quốc gia, quốc tế). Ví dụ: Internet.",
+              "<strong>Chức năng chung của mạng:</strong> chia sẻ tài nguyên (tệp, máy in, đường truyền), trao đổi thông tin, làm việc cộng tác."
+            ]
+          },
+          {
+            id: "l3-q4",
+            title: "Khái niệm và vai trò của Internet",
+            prompt: "Internet là gì? Phân biệt Internet và World Wide Web (WWW).",
+            knowledge: [
+              "<strong>Internet:</strong> mạng toàn cầu kết nối hàng tỷ thiết bị và hàng triệu mạng nhỏ, sử dụng bộ giao thức TCP/IP.",
+              "<strong>WWW:</strong> một dịch vụ chạy trên Internet, gồm các trang web liên kết bằng siêu liên kết."
+            ],
+            answer: [
+              "Internet là <strong>hạ tầng</strong>, còn WWW là <strong>một trong nhiều dịch vụ</strong> dùng hạ tầng đó. Các dịch vụ khác: email, truyền tệp (FTP), gọi video..."
+            ]
+          },
+          {
+            id: "l3-q5",
+            title: "Cách các máy tính trao đổi thông tin",
+            prompt: "Giao thức mạng là gì? Vì sao cần giao thức? Kể tên một số giao thức thông dụng và chức năng của chúng.",
+            knowledge: [
+              "<strong>Giao thức (protocol):</strong> là tập quy tắc thống nhất về định dạng và cách trao đổi dữ liệu giữa các thiết bị, giúp các thiết bị khác nhau \"hiểu\" nhau. Dữ liệu được chia thành các gói tin (packet) để truyền đi.",
+              "<strong>TCP/IP:</strong> bộ giao thức nền tảng của Internet (IP định địa chỉ và chuyển gói tin, TCP đảm bảo truyền tin cậy).",
+              "<strong>HTTP/HTTPS:</strong> truyền trang web (HTTPS có mã hóa).",
+              "<strong>SMTP/IMAP/POP3:</strong> gửi và nhận email.",
+              "<strong>DNS:</strong> đổi tên miền thành địa chỉ IP."
+            ]
+          },
+          {
+            id: "l3-q6",
+            title: "Khái niệm địa chỉ IP",
+            prompt: "Địa chỉ IP là gì? Phân biệt IPv4 và IPv6. Vì sao có địa chỉ IP công cộng và riêng?",
+            knowledge: [
+              "<strong>IP (Internet Protocol – Giao thức Internet):</strong> nhãn số định danh duy nhất cho một thiết bị trong mạng, để gói tin biết đi đâu.",
+              "<strong>IPv4:</strong> 32 bit, viết dạng 4 số thập phân, ví dụ <code>192.168.1.1</code>, khoảng 4,3 tỷ địa chỉ (đã gần cạn).",
+              "<strong>IPv6:</strong> 128 bit, viết dạng hệ thập lục phân, ví dụ <code>2001:db8::1</code>, không gian địa chỉ gần như vô hạn.",
+              "<strong>IP công cộng & IP riêng:</strong> IP công cộng dùng để giao tiếp trên Internet. IP riêng (ví dụ <code>192.168.x.x</code>) dùng trong mạng nội bộ, giúp tiết kiệm địa chỉ công cộng; router dùng <strong>NAT</strong> để chuyển đổi."
+            ]
+          }
+        ]
+      },
+      {
+        id: "lesson-4",
+        lessonNum: "Lesson 4",
+        title: "An toàn thông tin",
+        questions: [
+          {
+            id: "l4-q1",
+            title: "Phần mềm độc hại",
+            prompt: "Kể tên và mô tả ngắn gọn ít nhất bốn loại phần mềm độc hại (virus, worm, trojan, ransomware, spyware...).",
+            knowledge: [
+              "<strong>Virus:</strong> gắn vào tệp/chương trình khác, lây khi tệp được chạy.",
+              "<strong>Worm (sâu):</strong> tự lây lan qua mạng, không cần người dùng thao tác.",
+              "<strong>Trojan (ngựa thành Troy):</strong> giả dạng phần mềm hợp pháp để lừa người dùng cài đặt, sau đó mở cửa cho kẻ tấn công.",
+              "<strong>Ransomware:</strong> mã hóa dữ liệu rồi đòi tiền chuộc.",
+              "<strong>Spyware:</strong> theo dõi và thu thập thông tin người dùng (mật khẩu, thói quen duyệt web)."
+            ]
+          },
+          {
+            id: "l4-q2",
+            title: "Công cụ bảo vệ máy tính",
+            prompt: "Nêu các biện pháp và công cụ giúp bảo vệ máy tính khỏi mối đe dọa.",
+            knowledge: [
+              "Phần mềm diệt virus/chống mã độc, luôn cập nhật cơ sở dữ liệu nhận dạng.",
+              "<strong>Tường lửa (firewall):</strong> kiểm soát lưu lượng vào/ra.",
+              "Cập nhật hệ điều hành và phần mềm để vá lỗ hổng.",
+              "Sao lưu dữ liệu định kỳ (<strong>nguyên tắc 3-2-1</strong>).",
+              "Mật khẩu mạnh, xác thực hai yếu tố (<strong>2FA</strong>).",
+              "Không mở tệp đính kèm, liên kết lạ; chỉ tải phần mềm từ nguồn tin cậy."
+            ]
+          }
+        ]
+      },
+      {
+        id: "lesson-5",
+        lessonNum: "Lesson 5",
+        title: "Phần mềm và hệ điều hành",
+        questions: [
+          {
+            id: "l5-q1",
+            title: "Phân loại phần mềm thông dụng",
+            prompt: "Phân loại các phần mềm sau: Windows, Microsoft Word, Google Chrome, driver card đồ họa, Photoshop, trình diệt virus. Chúng thuộc phần mềm hệ thống, tiện ích hay ứng dụng?",
+            knowledge: [
+              "<strong>Phần mềm hệ thống:</strong> quản lý và điều khiển phần cứng, nền tảng cho phần mềm khác (hệ điều hành, driver).",
+              "<strong>Phần mềm ứng dụng:</strong> phục vụ nhu cầu cụ thể của người dùng (soạn thảo, duyệt web, đồ họa).",
+              "<strong>Phần mềm tiện ích:</strong> hỗ trợ bảo trì, bảo vệ hệ thống (diệt virus, nén tệp, dọn dẹp)."
+            ],
+            answer: [
+              "<strong>Hệ thống:</strong> Windows, driver card đồ họa.",
+              "<strong>Ứng dụng:</strong> Word, Chrome, Photoshop.",
+              "<strong>Tiện ích:</strong> trình diệt virus."
+            ]
+          },
+          {
+            id: "l5-q2",
+            title: "Vai trò của hệ điều hành trong quản lý ứng dụng",
+            prompt: "Hệ điều hành thực hiện những nhiệm vụ gì để nhiều ứng dụng cùng chạy được trên một máy tính?",
+            knowledge: [
+              "Hệ điều hành là phần mềm trung gian giữa phần cứng và ứng dụng, đảm nhiệm:",
+              "<strong>Quản lý tiến trình/CPU:</strong> phân chia thời gian CPU cho các ứng dụng đang chạy.",
+              "<strong>Quản lý bộ nhớ:</strong> cấp phát và thu hồi RAM, tránh ứng dụng này ghi đè lên ứng dụng khác.",
+              "<strong>Quản lý tệp:</strong> tổ chức, lưu trữ, truy xuất tệp và thư mục.",
+              "<strong>Quản lý thiết bị:</strong> điều khiển thiết bị ngoại vi qua driver.",
+              "<strong>Giao diện người dùng và bảo mật:</strong> phân quyền, tài khoản."
+            ]
+          },
+          {
+            id: "l5-q3",
+            title: "Khái niệm và các dòng hệ điều hành",
+            prompt: "Hệ điều hành là gì? Kể tên các dòng hệ điều hành phổ biến trên máy tính và thiết bị di động.",
+            knowledge: [
+              "<strong>Khái niệm:</strong> Hệ điều hành là phần mềm hệ thống quản lý tài nguyên phần cứng, phần mềm và cung cấp môi trường để người dùng và ứng dụng hoạt động.",
+              "<strong>Máy tính:</strong> Windows, macOS, Linux (nhiều bản phân phối như Ubuntu, Fedora).",
+              "<strong>Di động:</strong> Android (nhân Linux), iOS/iPadOS.",
+              "<strong>Máy chủ:</strong> Windows Server, Linux server."
+            ]
+          },
+          {
+            id: "l5-q4",
+            title: "Bản quyền phần mềm",
+            prompt: "Bản quyền phần mềm là gì? Sử dụng phần mềm không bản quyền (crack) có thể gây ra những vấn đề gì?",
+            knowledge: [
+              "<strong>Khái niệm:</strong> Bản quyền phần mềm là quyền hợp pháp của tác giả/chủ sở hữu đối với việc sao chép, phân phối, sử dụng và sửa đổi phần mềm, thể hiện qua giấy phép (license). Có phần mềm thương mại, miễn phí (freeware), mã nguồn mở (open source).",
+              "<strong>Pháp lý:</strong> vi phạm pháp luật về sở hữu trí tuệ, có thể bị phạt.",
+              "<strong>An ninh:</strong> bản crack thường chứa mã độc, spyware, ransomware.",
+              "<strong>Kỹ thuật:</strong> không được cập nhật, vá lỗi, hỗ trợ; có thể mất ổn định.",
+              "<strong>Đạo đức:</strong> không tôn trọng công sức của người phát triển."
+            ]
+          }
+        ]
+      },
+      {
+        id: "lesson-6",
+        lessonNum: "Lesson 6",
+        title: "Lập trình JavaScript cơ bản",
+        questions: [
+          {
+            id: "l6-q1",
+            title: "Ngôn ngữ máy và ngôn ngữ lập trình bậc cao",
+            prompt: "So sánh ngôn ngữ máy và ngôn ngữ lập trình bậc cao. Vì sao cần trình biên dịch/thông dịch?",
+            table: {
+              headers: ["Tiêu chí", "Ngôn ngữ máy", "Ngôn ngữ bậc cao"],
+              rows: [
+                ["Biểu diễn", "Dãy bit 0/1", "Gần ngôn ngữ tự nhiên (JavaScript, Python...)"],
+                ["Máy hiểu trực tiếp", "Có", "Không"],
+                ["Dễ đọc, dễ viết", "Rất khó", "Dễ"],
+                ["Phụ thuộc phần cứng", "Cao", "Thấp, dễ chuyển đổi"]
+              ]
+            },
+            knowledge: [
+              "Máy tính chỉ thực thi được ngôn ngữ máy, nên chương trình viết bằng ngôn ngữ bậc cao cần <strong>trình biên dịch</strong> (dịch toàn bộ trước khi chạy) hoặc <strong>trình thông dịch</strong> (dịch và chạy từng phần). JavaScript thường được thông dịch/biên dịch tức thời trong trình duyệt."
+            ]
+          },
+          {
+            id: "l6-q2",
+            title: "Sửa lỗi cú pháp thường gặp",
+            prompt: "Tìm và sửa lỗi cú pháp trong đoạn mã sau:",
+            promptCode: `var ten = "An\nprint(ten;\nvar tuoi = 20\nprint("Tuoi: + tuoi)`,
+            knowledge: [
+              "<strong>Lỗi cú pháp (syntax error):</strong> là lỗi viết sai quy tắc của ngôn ngữ nên chương trình không chạy được. Các lỗi hay gặp: thiếu dấu đóng nháy, thiếu dấu ngoặc, sai chính tả từ khóa/tên hàm, thiếu dấu <code>;</code>."
+            ],
+            answer: [
+              "<strong>Dòng 1:</strong> thiếu dấu nháy đóng, sửa thành <code>\"An\"</code>.",
+              "<strong>Dòng 2:</strong> thiếu dấu <code>)</code>, sửa thành <code>print(ten);</code>.",
+              "<strong>Dòng 3 và 4:</strong> thiếu dấu nháy đóng ở chuỗi <code>\"Tuoi: \"</code> và nên kết thúc bằng <code>;</code> (JavaScript tự chèn nhưng nên viết rõ)."
+            ],
+            answerCode: `var ten = "An";\nprint(ten);\nvar tuoi = 20;\nprint("Tuoi: " + tuoi);`
+          },
+          {
+            id: "l6-q3",
+            title: "Biến, khai báo, gán giá trị và hàm print",
+            prompt: "Biến là gì? Cho đoạn mã sau, hãy cho biết kết quả in ra:",
+            promptCode: `var a = 5;\nvar b = 3;\na = a + b;\nprint(a);\nprint("b = " + b);`,
+            knowledge: [
+              "<strong>Biến:</strong> là vùng nhớ có tên dùng để lưu giá trị; có thể thay đổi giá trị trong quá trình chạy.",
+              "<strong>Khai báo:</strong> <code>var ten;</code> (hoặc <code>let</code>, <code>const</code> trong JavaScript hiện đại).",
+              "<strong>Gán:</strong> <code>ten = giatri;</code> (dấu <code>=</code> là phép gán, không phải so sánh bằng).",
+              "<code>print(...)</code> hiển thị giá trị ra màn hình. Toán tử <code>+</code> với chuỗi sẽ nối chuỗi."
+            ],
+            answer: [
+              "Kết quả in ra màn hình:",
+              "<code>8</code>",
+              "<code>b = 3</code>",
+              "Vì <code>a = 5 + 3 = 8</code>, còn <code>b</code> không đổi."
+            ]
+          }
+        ]
+      },
+      {
+        id: "lesson-7",
+        lessonNum: "Lesson 7",
+        title: "Xử lý ảnh số",
+        questions: [
+          {
+            id: "l7-q1",
+            title: "Cấu trúc ảnh số và mô hình RGB",
+            prompt: "Ảnh số được cấu tạo như thế nào? Giải thích mô hình màu RGB. Màu (255, 0, 0), (0, 0, 0), (255, 255, 255) là màu gì?",
+            knowledge: [
+              "<strong>Ảnh số:</strong> là một lưới (ma trận) các điểm ảnh (pixel); mỗi pixel có vị trí <code>(x, y)</code> và giá trị màu. Càng nhiều pixel thì độ phân giải càng cao.",
+              "<strong>RGB:</strong> mỗi pixel được tạo từ ba kênh Red, Green, Blue, mỗi kênh có giá trị từ 0 đến 255 (8 bit). Màu hiển thị là sự pha trộn ba kênh."
+            ],
+            answer: [
+              "<code>(255, 0, 0)</code>: đỏ.",
+              "<code>(0, 0, 0)</code>: đen.",
+              "<code>(255, 255, 255)</code>: trắng."
+            ]
+          },
+          {
+            id: "l7-q2",
+            title: "Trình bày cấu trúc ảnh số",
+            prompt: "Một ảnh có kích thước 800 × 600 pixel. Ảnh có bao nhiêu pixel? Nếu mỗi pixel dùng 3 byte (RGB), dung lượng ảnh chưa nén là bao nhiêu?",
+            knowledge: [
+              "<strong>Số pixel</strong> = chiều rộng × chiều cao.",
+              "<strong>Dung lượng chưa nén</strong> = số pixel × số byte mỗi pixel."
+            ],
+            answer: [
+              "<strong>Số pixel:</strong> <code>800 × 600 = 480 000</code> pixel.",
+              "<strong>Dung lượng:</strong> <code>480 000 × 3 = 1 440 000</code> byte, khoảng <strong>1,37 MB</strong> (<code>1 440 000 / 1024 / 1024</code>)."
+            ]
+          },
+          {
+            id: "l7-q3",
+            title: "Tải ảnh số và thao tác với điểm ảnh",
+            prompt: "Viết đoạn mã tải một ảnh, rồi đặt màu của pixel tại vị trí (0, 0) thành đỏ. (Ví dụ dùng thư viện SimpleImage thường dùng trong các bài thực hành xử lý ảnh bằng JavaScript. Tên hàm có thể khác tùy môi trường thực hành của lớp.)",
+            knowledge: [
+              "Để thao tác với ảnh cần: (1) tải ảnh thành đối tượng, (2) truy cập từng pixel, (3) đọc/ghi các giá trị R, G, B, (4) hiển thị ảnh kết quả."
+            ],
+            answerCode: `var anh = new SimpleImage("hinh.png");\nvar p = anh.getPixel(0, 0);\np.setRed(255);\np.setGreen(0);\np.setBlue(0);\nprint(anh);`
+          },
+          {
+            id: "l7-q4",
+            title: "Vòng lặp for và biểu thức với điểm ảnh",
+            prompt: "Viết đoạn mã chuyển ảnh sang thang xám (grayscale) bằng cách lấy trung bình ba kênh màu của mỗi pixel. Vòng lặp for đóng vai trò gì ở đây?",
+            knowledge: [
+              "<strong>Vòng lặp for:</strong> giúp lặp lại cùng một thao tác cho mọi pixel mà không phải viết thủ công từng pixel.",
+              "<strong>Ảnh xám:</strong> ba kênh R, G, B có giá trị bằng nhau.",
+              "<strong>Biểu thức:</strong> <code>avg = (R + G + B) / 3</code>."
+            ],
+            answer: [
+              "Có thể dùng vòng lặp <code>for (var p of anh.values())</code> hoặc hai vòng <code>for</code> lồng nhau theo <code>x</code> (từ 0 đến chiều rộng) và <code>y</code> (từ 0 đến chiều cao)."
+            ],
+            answerCode: `var anh = new SimpleImage("hinh.png");\nfor (var p of anh.values()) {\n    var avg = (p.getRed() + p.getGreen() + p.getBlue()) / 3;\n    p.setRed(avg);\n    p.setGreen(avg);\n    p.setBlue(avg);\n}\nprint(anh);`
+          }
+        ]
+      },
+      {
+        id: "lesson-8",
+        lessonNum: "Lesson 8",
+        title: "Xử lý dữ liệu bảng",
+        questions: [
+          {
+            id: "l8-q1",
+            title: "Lọc, thống kê và tìm kiếm dữ liệu bảng",
+            prompt: "Cho bảng điểm sau: a) Lọc ra các sinh viên lớp A1. b) Tính điểm trung bình của lớp A1 và tìm sinh viên có điểm cao nhất toàn bảng.",
+            table: {
+              headers: ["STT", "Họ tên", "Lớp", "Điểm"],
+              rows: [
+                ["1", "An", "A1", "8"],
+                ["2", "Bình", "A2", "6"],
+                ["3", "Chi", "A1", "9"],
+                ["4", "Dũng", "A2", "5"]
+              ]
+            },
+            knowledge: [
+              "<strong>Lọc:</strong> giữ lại các dòng thỏa điều kiện.",
+              "<strong>Thống kê cơ bản:</strong> đếm (COUNT), tổng (SUM), trung bình (AVERAGE), lớn nhất (MAX), nhỏ nhất (MIN).",
+              "<strong>Tìm kiếm:</strong> tìm dòng chứa giá trị cần tìm."
+            ],
+            answer: [
+              "<strong>a)</strong> An (8) và Chi (9).",
+              "<strong>b)</strong> Trung bình lớp A1 = <code>(8 + 9) / 2 = 8,5</code>. Điểm cao nhất là <strong>9</strong>, thuộc về <strong>Chi</strong>."
+            ],
+            answerCode: `const headers = ["STT", "Họ tên", "Lớp", "Điểm"];\nconst rows = [\n  { STT: 1, "Họ tên": "An", Lớp: "A1", "Điểm": 8 },\n  { STT: 2, "Họ tên": "Bình", Lớp: "A2", "Điểm": 6 },\n  { STT: 3, "Họ tên": "Chi", Lớp: "A1", "Điểm": 9 },\n  { STT: 4, "Họ tên": "Dũng", Lớp: "A2", "Điểm": 5 },\n];\n\nconst scoreTable = new SimpleTable(headers, rows);\n\n// a) Lọc ra các sinh viên lớp A1\nconst lopA1Table = scoreTable.filter((row) => row["Lớp"] === "A1");\n\n// b) Tính điểm trung bình của lớp A1\nconst avgLopA1 = lopA1Table.average("Điểm");\n\n// Tìm sinh viên có điểm cao nhất toàn bảng\nconst topStudent = scoreTable.max("Điểm");\n\nconsole.log("a) Sinh viên lớp A1:", lopA1Table.toArray());\nconsole.log("b) Điểm trung bình lớp A1:", avgLopA1);\nconsole.log("b) Sinh viên điểm cao nhất:", topStudent);`
+          }
+        ]
+      },
+      {
+        id: "lesson-9",
+        lessonNum: "Lesson 9",
+        title: "Hệ quản trị cơ sở dữ liệu",
+        questions: [
+          {
+            id: "l9-q1",
+            title: "Tổ chức dữ liệu trong hệ quản trị CSDL",
+            prompt: "Cơ sở dữ liệu quan hệ tổ chức dữ liệu như thế nào? Giải thích các khái niệm bảng, bản ghi, trường, khóa chính.",
+            knowledge: [
+              "<strong>Cơ sở dữ liệu (CSDL):</strong> tập hợp dữ liệu có tổ chức, được lưu trữ để dùng chung. Hệ quản trị CSDL (DBMS) là phần mềm tạo, lưu trữ, truy vấn và quản lý CSDL (MySQL, SQL Server, PostgreSQL, Access...).",
+              "<strong>Bảng (table):</strong> lưu dữ liệu về một đối tượng, gồm các hàng và cột.",
+              "<strong>Trường (field/cột):</strong> một thuộc tính của đối tượng (ví dụ: họ tên).",
+              "<strong>Bản ghi (record/hàng):</strong> một đối tượng cụ thể (ví dụ: một sinh viên).",
+              "<strong>Khóa chính (primary key):</strong> trường (hoặc tập trường) xác định duy nhất mỗi bản ghi, không trùng, không rỗng (ví dụ: mã sinh viên).",
+              "<strong>Khóa ngoại:</strong> trường tham chiếu đến khóa chính của bảng khác, tạo mối quan hệ giữa các bảng."
+            ]
+          },
+          {
+            id: "l9-q2",
+            title: "Các phép toán trên hệ quản trị CSDL",
+            prompt: "Cho bảng SinhVien(MaSV, HoTen, Lop, Diem). Viết câu lệnh SQL để: (a) lấy tất cả sinh viên lớp A1; (b) thêm một sinh viên mới; (c) cập nhật điểm; (d) xóa một sinh viên; (e) đếm số sinh viên theo từng lớp.",
+            knowledge: [
+              "Các thao tác cơ bản gọi là <strong>CRUD</strong>: Create (thêm), Read (đọc/truy vấn), Update (sửa), Delete (xóa).",
+              "<em>Lưu ý:</em> luôn có mệnh đề <code>WHERE</code> khi dùng <code>UPDATE</code> / <code>DELETE</code>, nếu không sẽ tác động lên toàn bộ bảng."
+            ],
+            answerCode: `-- (a) Truy vấn có điều kiện\nSELECT * FROM SinhVien WHERE Lop = 'A1';\n\n-- (b) Thêm sinh viên mới\nINSERT INTO SinhVien (MaSV, HoTen, Lop, Diem)\nVALUES ('SV05', 'Em', 'A1', 7);\n\n-- (c) Cập nhật điểm\nUPDATE SinhVien SET Diem = 9 WHERE MaSV = 'SV05';\n\n-- (d) Xóa sinh viên\nDELETE FROM SinhVien WHERE MaSV = 'SV05';\n\n-- (e) Thống kê số sinh viên theo từng lớp\nSELECT Lop, COUNT(*) AS SoLuong FROM SinhVien GROUP BY Lop;`
+          }
+        ]
+      },
+      {
+        id: "lesson-10",
+        lessonNum: "Lesson 10",
+        title: "Phát triển dự án phần mềm",
+        questions: [
+          {
+            id: "l10-q1",
+            title: "Quy trình phát triển phần mềm",
+            prompt: "Nêu các giai đoạn chính trong vòng đời phát triển phần mềm (SDLC). Phân biệt ngắn gọn mô hình thác nước và mô hình Agile.",
+            knowledge: [
+              "<strong>6 giai đoạn chính của SDLC:</strong> (1) Thu thập và phân tích yêu cầu; (2) Thiết kế (kiến trúc, giao diện, cơ sở dữ liệu); (3) Lập trình (cài đặt); (4) Kiểm thử; (5) Triển khai; (6) Bảo trì."
+            ],
+            answer: [
+              "<strong>Thác nước (Waterfall):</strong> các giai đoạn thực hiện tuần tự, xong giai đoạn này mới sang giai đoạn sau; phù hợp khi yêu cầu ổn định, rõ ràng.",
+              "<strong>Agile:</strong> phát triển lặp theo các chu kỳ ngắn (sprint), giao sản phẩm từng phần, dễ thay đổi theo phản hồi của khách hàng."
+            ]
+          }
+        ]
+      },
+      {
+        id: "lesson-11",
+        lessonNum: "Lesson 11",
+        title: "An ninh, đạo đức và pháp lý trong ICT",
+        questions: [
+          {
+            id: "l11-q1",
+            title: "An ninh máy tính, đạo đức và quyền riêng tư",
+            prompt: "Quyền riêng tư dữ liệu là gì? Nêu ba hành vi cần tránh và ba biện pháp bảo vệ dữ liệu cá nhân khi sử dụng Internet.",
+            knowledge: [
+              "<strong>Quyền riêng tư:</strong> là quyền của cá nhân được kiểm soát việc thông tin của mình được thu thập, sử dụng và chia sẻ như thế nào."
+            ],
+            answer: [
+              "<strong>3 hành vi cần tránh:</strong> (1) Chia sẻ mật khẩu, mã OTP, thông tin cá nhân với người lạ; (2) Đăng tải hoặc phát tán thông tin, hình ảnh của người khác khi chưa được phép; (3) Truy cập trái phép tài khoản/hệ thống của người khác.",
+              "<strong>3 biện pháp bảo vệ:</strong> (1) Mật khẩu mạnh, khác nhau cho từng dịch vụ, bật 2FA; (2) Cẩn trọng với email/liên kết lừa đảo (phishing), kiểm tra HTTPS; (3) Thiết lập quyền riêng tư trên mạng xã hội, hạn chế cấp quyền cho ứng dụng."
+            ]
+          },
+          {
+            id: "l11-q2",
+            title: "Pháp lý và ứng xử của doanh nghiệp về đạo đức ICT",
+            prompt: "Vì sao cần có quy định pháp lý và quy tắc ứng xử của doanh nghiệp trong lĩnh vực ICT? Kể tên một số văn bản pháp luật về an toàn thông tin và dữ liệu cá nhân tại Việt Nam.",
+            knowledge: [
+              "<strong>Vai trò:</strong> pháp luật đặt ra ranh giới bắt buộc và chế tài; quy tắc ứng xử của doanh nghiệp định hướng văn hóa, trách nhiệm đạo đức, bảo vệ khách hàng và uy tín doanh nghiệp. Hai loại này bổ sung cho nhau.",
+              "<strong>Văn bản tại Việt Nam (ví dụ):</strong> Luật An ninh mạng, Luật An toàn thông tin mạng, Luật Sở hữu trí tuệ, Nghị định về bảo vệ dữ liệu cá nhân và Luật Bảo vệ dữ liệu cá nhân.",
+              "<em>Lưu ý:</em> nên đối chiếu số hiệu, ngày hiệu lực của các văn bản trên các nguồn chính thống (Cổng thông tin Quốc hội, Công báo...), vì quy định có thể được cập nhật."
+            ]
+          }
+        ]
+      },
+      {
+        id: "lesson-12",
+        lessonNum: "Lesson 12",
+        title: "Trí tuệ nhân tạo (AI)",
+        questions: [
+          {
+            id: "l12-q1",
+            title: "Khái niệm AI, AI tạo sinh và AI Agent",
+            prompt: "Phân biệt AI, Generative AI và AI Agent.",
+            knowledge: [
+              "<strong>AI (Trí tuệ nhân tạo):</strong> lĩnh vực làm cho máy tính thực hiện các tác vụ đòi hỏi trí thông minh như nhận dạng, dự đoán, ra quyết định.",
+              "<strong>AI tạo sinh (Generative AI):</strong> nhánh của AI có khả năng tạo ra nội dung mới (văn bản, hình ảnh, âm thanh, mã nguồn) dựa trên dữ liệu đã học; ví dụ các mô hình ngôn ngữ lớn như Gemini, ChatGPT, Claude.",
+              "<strong>AI Agent:</strong> hệ thống AI có khả năng tự lập kế hoạch và thực hiện chuỗi hành động (dùng công cụ, tìm kiếm, gọi API...) để đạt mục tiêu người dùng đặt ra, với mức độ tự chủ cao hơn so với chatbot hỏi-đáp đơn thuần."
+            ]
+          },
+          {
+            id: "l12-q2",
+            title: "Tác động của AI đến việc làm và quy trình ngành CNTT",
+            prompt: "Phân tích tác động của AI đối với các vị trí việc làm và quy trình làm việc trong ngành CNTT (cả cơ hội và thách thức).",
+            knowledge: [
+              "<strong>Cơ hội:</strong> Tự động hóa tác vụ lặp lại (viết mã mẫu, kiểm thử, viết tài liệu, hỗ trợ khách hàng), tăng năng suất; Xuất hiện vị trí mới (kỹ sư AI/ML, kỹ sư prompt, chuyên gia dữ liệu, chuyên gia kiểm định AI); Rút ngắn các giai đoạn của SDLC (phân tích, lập trình, kiểm thử).",
+              "<strong>Thách thức:</strong> Một số tác vụ cấp thấp bị thay thế, yêu cầu kỹ năng của nhân sự thay đổi; Rủi ro về chất lượng/bảo mật mã do AI sinh ra, vấn đề bản quyền, thiên kiến; Cần học tập liên tục."
+            ],
+            answer: [
+              "<strong>Kết luận:</strong> AI thay đổi cách làm việc và đòi hỏi kỹ năng mới, con người vẫn giữ vai trò giám sát, chịu trách nhiệm và ra quyết định."
+            ]
+          },
+          {
+            id: "l12-q3",
+            title: "Dùng AI tạo sinh với kỹ thuật viết prompt cơ bản",
+            prompt: "So sánh hai prompt sau và cho biết prompt nào tốt hơn, vì sao: (1) \"Viết trang web.\" (2) \"Bạn là lập trình viên web. Hãy viết mã HTML và CSS cho trang giới thiệu cá nhân gồm: tiêu đề, ảnh đại diện, đoạn giới thiệu 3 câu, danh sách 3 sở thích. Giao diện đơn giản, tông màu xanh.\"",
+            knowledge: [
+              "<strong>Prompt tốt thường có:</strong> Vai trò (AI đóng vai gì); Nhiệm vụ rõ ràng; Bối cảnh/ràng buộc (nội dung, độ dài, phong cách); Định dạng đầu ra mong muốn. Có thể thêm ví dụ mẫu, và tinh chỉnh lặp qua các lượt hỏi."
+            ],
+            answer: [
+              "<strong>Prompt (2) tốt hơn</strong> vì xác định vai trò, nhiệm vụ, nội dung cụ thể và ràng buộc về giao diện. Prompt (1) quá mơ hồ nên kết quả khó đúng ý. Sau khi nhận kết quả vẫn cần đọc, chạy thử và yêu cầu chỉnh sửa."
+            ]
+          },
+          {
+            id: "l12-q4",
+            title: "Công cụ tìm kiếm AI kết hợp Google Search",
+            prompt: "Nêu ưu điểm và hạn chế của công cụ tìm kiếm có tích hợp AI so với Google Search truyền thống. Nên kết hợp chúng như thế nào để tìm thông tin hiệu quả?",
+            knowledge: [
+              "<strong>Tìm kiếm AI:</strong> tổng hợp, tóm tắt nhiều nguồn thành một câu trả lời, hiểu câu hỏi ngôn ngữ tự nhiên, hỗ trợ hỏi tiếp. <em>Hạn chế:</em> có thể sai, bỏ sót hoặc bịa nguồn, thiếu chiều sâu.",
+              "<strong>Google Search truyền thống:</strong> trả về danh sách nguồn gốc để người dùng tự đánh giá, phù hợp khi cần tài liệu gốc."
+            ],
+            answer: [
+              "<strong>Cách kết hợp hiệu quả:</strong> (1) Dùng AI để hiểu nhanh vấn đề, gợi ý từ khóa, tóm tắt; (2) Dùng Google Search (và toán tử như <code>\"cụm từ chính xác\"</code>, <code>site:</code>, <code>filetype:</code>) để tìm nguồn gốc; (3) Mở nguồn dẫn, đối chiếu trước khi dùng."
+            ]
+          },
+          {
+            id: "l12-q5",
+            title: "Đánh giá và kiểm chứng kết quả do AI tạo ra",
+            prompt: "Vì sao không nên tin hoàn toàn kết quả của AI? \"Ảo giác\" (hallucination) là gì? Nêu quy trình kiểm chứng một câu trả lời của AI và những điều cần chú ý để đảm bảo an toàn thông tin.",
+            knowledge: [
+              "<strong>Hallucination (Ảo giác):</strong> AI sinh ra thông tin nghe hợp lý nhưng sai hoặc không có thật (số liệu, trích dẫn, tên tài liệu...). Các nguyên nhân khác gây sai: dữ liệu huấn luyện lỗi thời hoặc thiên kiến, câu hỏi mơ hồ.",
+              "<strong>Quy trình kiểm chứng 4 bước:</strong> (1) Xác định các khẳng định quan trọng (số liệu, ngày tháng, trích dẫn, mã nguồn); (2) Đối chiếu với nguồn tin cậy, độc lập (tài liệu chính thức, sách giáo khoa, trang cơ quan nhà nước, bài báo khoa học); (3) Với mã nguồn: chạy thử, kiểm thử với nhiều trường hợp, đọc hiểu trước khi dùng; (4) Hỏi lại AI theo cách khác hoặc yêu cầu nêu nguồn, rồi kiểm tra nguồn đó có thật.",
+              "<strong>An toàn thông tin:</strong> Không nhập mật khẩu, dữ liệu cá nhân, tài liệu mật vào công cụ AI công cộng; Cẩn trọng với liên kết, mã do AI đề xuất; Người dùng chịu trách nhiệm cuối cùng với kết quả sử dụng, không phụ thuộc máy móc."
+            ]
+          }
+        ]
+      }
+    ];
+
+    // ================= UTILITY: VIETNAMESE DIACRITIC REMOVAL =================
+    function normalizeText(str) {
+      return str
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/đ/g, "d")
+        .replace(/Đ/g, "D")
+        .toLowerCase();
+    }
+
+    function escapeHtml(str) {
+      return str
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
+    }
+
+    // ================= RENDER CONTENT & SIDEBAR TOC =================
+    const lessonsContainer = document.getElementById("lessonsContainer");
+    const tocNav = document.getElementById("tocNav");
+
+    function renderApp() {
+      let lessonsHtml = "";
+      let tocHtml = "";
+
+      COURSE_DATA.forEach((lesson) => {
+        // Sidebar Lesson Item
+        tocHtml += `
+          <div class="toc-group">
+            <a href="#${lesson.id}" data-target="${lesson.id}" class="toc-lesson-link flex items-center justify-between px-3 py-2 rounded-xl font-semibold text-slate-700 dark:text-slate-200 hover:bg-blue-50 dark:hover:bg-slate-800/80 hover:text-blue-600 dark:hover:text-blue-400 transition">
+              <span class="truncate"><span class="text-blue-600 dark:text-blue-400 mr-1">${lesson.lessonNum}:</span>${lesson.title}</span>
+              <span class="text-[10px] px-1.5 py-0.5 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 ml-1 shrink-0">${lesson.questions.length}</span>
+            </a>
+            <div class="mt-1 pl-3 border-l-2 border-slate-100 dark:border-slate-800 space-y-0.5">
+              ${lesson.questions.map((q) => `
+                <a href="#${q.id}" data-target="${q.id}" class="toc-question-link block px-2.5 py-1.5 rounded-lg text-xs text-slate-600 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-50 dark:hover:bg-slate-800/50 truncate transition" title="${q.title}">
+                  ${q.title}
+                </a>
+              `).join("")}
+            </div>
+          </div>
+        `;
+
+        // Main Lesson Section
+        lessonsHtml += `
+          <section id="${lesson.id}" class="lesson-section scroll-mt-24 space-y-4">
+            <div class="flex items-center gap-3 pb-2 border-b-2 border-blue-600/20 dark:border-blue-500/20">
+              <span class="px-3 py-1 rounded-xl bg-blue-600 text-white text-xs font-bold uppercase tracking-wider shadow-xs shrink-0">
+                ${lesson.lessonNum}
+              </span>
+              <h3 class="text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-white searchable-text">
+                ${lesson.title}
+              </h3>
+            </div>
+
+            <div class="space-y-5">
+              ${lesson.questions.map((q, idx) => renderQuestionCard(q, idx + 1, lesson)).join("")}
+            </div>
+          </section>
+        `;
+      });
+
+      tocNav.innerHTML = tocHtml;
+      lessonsContainer.innerHTML = lessonsHtml;
+    }
+
+    function renderQuestionCard(q, num, lesson) {
+      const tableHtml = q.table ? `
+        <div class="my-3 overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700">
+          <table class="w-full text-sm text-left border-collapse">
+            <thead class="bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 font-semibold">
+              <tr>
+                ${q.table.headers.map(h => `<th class="px-4 py-2.5 border-b border-slate-200 dark:border-slate-700">${h}</th>`).join("")}
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-200 dark:divide-slate-800">
+              ${q.table.rows.map(row => `
+                <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/40">
+                  ${row.map(cell => `<td class="px-4 py-2 searchable-text">${cell}</td>`).join("")}
+                </tr>
+              `).join("")}
+            </tbody>
+          </table>
+        </div>
+      ` : "";
+
+      const promptCodeHtml = q.promptCode ? renderCodeBlock(q.promptCode, "Đề bài / Mã nguồn") : "";
+      const answerCodeHtml = q.answerCode ? renderCodeBlock(q.answerCode, "Code minh họa / Lời giải") : "";
+
+      const knowledgeHtml = q.knowledge ? `
+        <div class="space-y-1.5">
+          <div class="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-400">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+            <span>Kiến thức trọng tâm</span>
+          </div>
+          <ul class="list-disc pl-5 space-y-1.5 text-sm sm:text-[15px] text-slate-700 dark:text-slate-300 leading-relaxed">
+            ${q.knowledge.map(item => `<li class="searchable-text">${item}</li>`).join("")}
+          </ul>
+        </div>
+      ` : "";
+
+      const answerHtml = q.answer ? `
+        <div class="mt-3 p-3.5 rounded-xl bg-emerald-50/80 dark:bg-emerald-950/30 border border-emerald-200/80 dark:border-emerald-800/60 space-y-1.5">
+          <div class="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-emerald-700 dark:text-emerald-400">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            <span>Đáp án / Kết luận</span>
+          </div>
+          <ul class="list-disc pl-5 space-y-1 text-sm sm:text-[15px] text-slate-800 dark:text-slate-200 leading-relaxed">
+            ${q.answer.map(item => `<li class="searchable-text">${item}</li>`).join("")}
+          </ul>
+        </div>
+      ` : "";
+
+      return `
+        <article id="${q.id}" data-lesson="${lesson.lessonNum}: ${lesson.title}" data-title="${q.title}" class="question-card scroll-mt-24 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 shadow-xs hover:shadow-md transition-shadow overflow-hidden">
+          <!-- Question Header -->
+          <div class="p-4 sm:p-5 bg-slate-50/70 dark:bg-slate-800/40 border-b border-slate-200/70 dark:border-slate-800">
+            <div class="flex items-start justify-between gap-3">
+              <div>
+                <span class="text-xs font-semibold text-blue-600 dark:text-blue-400">Câu ${num} • ${lesson.lessonNum}</span>
+                <h4 class="text-base sm:text-lg font-bold text-slate-900 dark:text-white mt-0.5 searchable-text">
+                  ${q.title}
+                </h4>
+              </div>
+              <button type="button" onclick="toggleSingleSolution('${q.id}')" class="single-toggle-btn shrink-0 px-2.5 py-1 rounded-lg text-xs font-medium bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 transition">
+                Thu gọn
+              </button>
+            </div>
+            <p class="mt-2.5 text-sm sm:text-[15px] font-medium text-slate-800 dark:text-slate-200 leading-relaxed searchable-text">
+              ${q.prompt}
+            </p>
+            ${tableHtml}
+            ${promptCodeHtml}
+          </div>
+
+          <!-- Solution Body -->
+          <div id="sol-${q.id}" class="solution-body p-4 sm:p-5 space-y-3">
+            ${knowledgeHtml}
+            ${answerHtml}
+            ${answerCodeHtml}
+          </div>
+        </article>
+      `;
+    }
+
+    function renderCodeBlock(code, label) {
+      const escaped = escapeHtml(code);
+      return `
+        <div class="my-3 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-700 bg-slate-900 text-slate-100">
+          <div class="px-3.5 py-1.5 bg-slate-800/90 border-b border-slate-700 flex items-center justify-between text-xs text-slate-300">
+            <span class="font-mono font-medium">${label}</span>
+            <button type="button" onclick="copyCode(this)" data-code="${escapeHtml(code)}" class="px-2 py-0.5 rounded bg-slate-700 hover:bg-blue-600 text-white transition flex items-center gap-1">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+              <span>Sao chép</span>
+            </button>
+          </div>
+          <pre class="p-3.5 text-xs sm:text-sm font-mono overflow-x-auto leading-relaxed"><code>${escaped}</code></pre>
+        </div>
+      `;
+    }
+
+    // Render initial DOM
+    renderApp();
+
+    // Lưu bản gốc HTML của các vùng văn bản có thể tìm kiếm để khôi phục khi xóa/đổi từ khóa
+    const searchableElements = Array.from(document.querySelectorAll(".searchable-text"));
+    searchableElements.forEach((el) => {
+      el.dataset.origHtml = el.innerHTML;
+    });
+
+    // ================= SMART SEARCH + AUTO SCROLL + HIGHLIGHT =================
+    const searchInput = document.getElementById("searchInput");
+    const searchControls = document.getElementById("searchControls");
+    const matchCounter = document.getElementById("matchCounter");
+    const prevMatchBtn = document.getElementById("prevMatchBtn");
+    const nextMatchBtn = document.getElementById("nextMatchBtn");
+    const clearSearchBtn = document.getElementById("clearSearchBtn");
+    const searchDropdown = document.getElementById("searchDropdown");
+
+    let matchedMarks = [];
+    let currentMatchIdx = -1;
+    let searchDebounceTimer = null;
+
+    function clearHighlights() {
+      searchableElements.forEach((el) => {
+        if (el.innerHTML !== el.dataset.origHtml) {
+          el.innerHTML = el.dataset.origHtml;
+        }
+      });
+      matchedMarks = [];
+      currentMatchIdx = -1;
+    }
+
+    // Highlight từ khóa hỗ trợ cả tiếng Việt có dấu và không dấu
+    function highlightInElement(el, rawQuery) {
+      const normQuery = normalizeText(rawQuery.trim());
+      if (!normQuery) return;
+
+      const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT, null);
+      const textNodes = [];
+      let node;
+      while ((node = walker.nextNode())) {
+        if (node.nodeValue && node.nodeValue.trim().length > 0) {
+          textNodes.push(node);
+        }
+      }
+
+      textNodes.forEach((textNode) => {
+        const text = textNode.nodeValue;
+        // Tạo ánh xạ vị trí từ chuỗi không dấu sang chuỗi gốc
+        let normStr = "";
+        const mapOrigIdx = [];
+        for (let i = 0; i < text.length; i++) {
+          const chNorm = normalizeText(text[i]);
+          for (let k = 0; k < chNorm.length; k++) {
+            normStr += chNorm[k];
+            mapOrigIdx.push(i);
+          }
+        }
+
+        let startIndex = 0;
+        let matchPos = normStr.indexOf(normQuery, startIndex);
+        if (matchPos === -1) return;
+
+        const frag = document.createDocumentFragment();
+        let lastOrigPos = 0;
+
+        while (matchPos !== -1) {
+          const origStart = mapOrigIdx[matchPos];
+          const origEnd = mapOrigIdx[matchPos + normQuery.length - 1] + 1;
+
+          if (origStart > lastOrigPos) {
+            frag.appendChild(document.createTextNode(text.slice(lastOrigPos, origStart)));
+          }
+
+          const mark = document.createElement("mark");
+          mark.className = "search-hl";
+          mark.textContent = text.slice(origStart, origEnd);
+          frag.appendChild(mark);
+
+          lastOrigPos = origEnd;
+          startIndex = matchPos + normQuery.length;
+          matchPos = normStr.indexOf(normQuery, startIndex);
+        }
+
+        if (lastOrigPos < text.length) {
+          frag.appendChild(document.createTextNode(text.slice(lastOrigPos)));
+        }
+
+        textNode.parentNode.replaceChild(frag, textNode);
+      });
+    }
+
+    function scrollToMatch(index, smooth = true) {
+      if (matchedMarks.length === 0) return;
+
+      matchedMarks.forEach((m) => m.classList.remove("active-match"));
+      currentMatchIdx = ((index % matchedMarks.length) + matchedMarks.length) % matchedMarks.length;
+
+      const targetMark = matchedMarks[currentMatchIdx];
+      targetMark.classList.add("active-match");
+      matchCounter.textContent = `${currentMatchIdx + 1}/${matchedMarks.length}`;
+
+      // Nếu card đang bị thu gọn lời giải, tự động mở rộng ra để người dùng thấy kết quả
+      const parentCard = targetMark.closest(".question-card");
+      if (parentCard) {
+        const solBody = parentCard.querySelector(".solution-body");
+        const toggleBtn = parentCard.querySelector(".single-toggle-btn");
+        if (solBody && solBody.classList.contains("hidden")) {
+          solBody.classList.remove("hidden");
+          if (toggleBtn) toggleBtn.textContent = "Thu gọn";
+        }
+        parentCard.classList.remove("card-flash");
+        void parentCard.offsetWidth;
+        parentCard.classList.add("card-flash");
+      }
+
+      // Cuộn mượt mà đưa phần tử khớp lên ngay vùng nhìn thấy phía dưới thanh tìm kiếm
+      const headerOffset = 105;
+      const elementPosition = targetMark.getBoundingClientRect().top + window.scrollY;
+      window.scrollTo({
+        top: Math.max(0, elementPosition - headerOffset),
+        behavior: smooth ? "smooth" : "auto"
+      });
+    }
+
+    function updateDropdown(query) {
+      const normQuery = normalizeText(query.trim());
+      if (!normQuery) {
+        searchDropdown.classList.add("hidden");
+        return;
+      }
+
+      const matchingCards = [];
+      COURSE_DATA.forEach((lesson) => {
+        lesson.questions.forEach((q) => {
+          const combined = normalizeText(
+            `${lesson.lessonNum} ${lesson.title} ${q.title} ${q.prompt} ${(q.knowledge || []).join(" ")} ${(q.answer || []).join(" ")}`
+          );
+          if (combined.includes(normQuery)) {
+            matchingCards.push({
+              id: q.id,
+              lessonLabel: `${lesson.lessonNum}: ${lesson.title}`,
+              title: q.title,
+              snippet: q.prompt
+            });
+          }
+        });
+      });
+
+      if (matchingCards.length === 0) {
+        searchDropdown.innerHTML = `
+          <div class="p-4 text-center text-sm text-slate-500 dark:text-slate-400">
+            Không tìm thấy phần nào khớp với "<strong class="text-slate-700 dark:text-slate-200">${escapeHtml(query)}</strong>"
+          </div>
+        `;
+      } else {
+        searchDropdown.innerHTML = matchingCards.map((item) => `
+          <button type="button" data-jump-id="${item.id}" class="dropdown-jump-btn w-full text-left px-4 py-2.5 hover:bg-blue-50 dark:hover:bg-slate-800 transition flex flex-col gap-0.5">
+            <span class="text-[11px] font-bold text-blue-600 dark:text-blue-400">${item.lessonLabel}</span>
+            <span class="text-sm font-semibold text-slate-900 dark:text-white">${item.title}</span>
+            <span class="text-xs text-slate-500 dark:text-slate-400 line-clamp-1">${item.snippet}</span>
+          </button>
+        `).join("");
+      }
+
+      searchDropdown.classList.remove("hidden");
+    }
+
+    function performSearch(query, autoScroll = true) {
+      clearHighlights();
+      const trimmed = query.trim();
+
+      if (!trimmed) {
+        searchControls.classList.add("hidden");
+        searchDropdown.classList.add("hidden");
+        return;
+      }
+
+      searchableElements.forEach((el) => {
+        highlightInElement(el, trimmed);
+      });
+
+      matchedMarks = Array.from(document.querySelectorAll("mark.search-hl"));
+      searchControls.classList.remove("hidden");
+      updateDropdown(trimmed);
+
+      if (matchedMarks.length > 0) {
+        if (autoScroll) {
+          scrollToMatch(0, true);
+        } else {
+          matchCounter.textContent = `1/${matchedMarks.length}`;
+        }
+      } else {
+        matchCounter.textContent = "0/0";
+      }
+    }
+
+    // Tự động tìm và cuộn ngay khi người dùng nhập từ khóa
+    searchInput.addEventListener("input", (e) => {
+      const val = e.target.value;
+      clearTimeout(searchDebounceTimer);
+      searchDebounceTimer = setTimeout(() => {
+        performSearch(val, true);
+      }, 220);
+    });
+
+    searchInput.addEventListener("focus", () => {
+      if (searchInput.value.trim()) {
+        searchDropdown.classList.remove("hidden");
+      }
+    });
+
+    searchInput.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        searchDropdown.classList.add("hidden");
+        if (matchedMarks.length > 0) {
+          scrollToMatch(e.shiftKey ? currentMatchIdx - 1 : currentMatchIdx + 1, true);
+        }
+      } else if (e.key === "Escape") {
+        searchDropdown.classList.add("hidden");
+      }
+    });
+
+    prevMatchBtn.addEventListener("click", () => scrollToMatch(currentMatchIdx - 1, true));
+    nextMatchBtn.addEventListener("click", () => scrollToMatch(currentMatchIdx + 1, true));
+
+    clearSearchBtn.addEventListener("click", () => {
+      searchInput.value = "";
+      clearHighlights();
+      searchControls.classList.add("hidden");
+      searchDropdown.classList.add("hidden");
+      searchInput.focus();
+    });
+
+    // Bấm vào gợi ý trong dropdown -> cuộn thẳng đến câu hỏi đó
+    searchDropdown.addEventListener("click", (e) => {
+      const btn = e.target.closest(".dropdown-jump-btn");
+      if (!btn) return;
+      const targetId = btn.dataset.jumpId;
+      searchDropdown.classList.add("hidden");
+      jumpToSection(targetId);
+    });
+
+    // Đóng dropdown khi click ra ngoài
+    document.addEventListener("click", (e) => {
+      if (!e.target.closest("#searchInput") && !e.target.closest("#searchDropdown")) {
+        searchDropdown.classList.add("hidden");
+      }
+    });
+
+    // Quick search pills trên banner
+    document.querySelectorAll(".quick-pill").forEach((pill) => {
+      pill.addEventListener("click", () => {
+        const kw = pill.dataset.quickSearch;
+        searchInput.value = kw;
+        performSearch(kw, true);
+      });
+    });
+
+    // ================= JUMP & SCROLLSPY =================
+    function jumpToSection(id) {
+      const target = document.getElementById(id);
+      if (!target) return;
+
+      // Mở rộng lời giải nếu đang ẩn
+      const solBody = target.querySelector(".solution-body");
+      const toggleBtn = target.querySelector(".single-toggle-btn");
+      if (solBody && solBody.classList.contains("hidden")) {
+        solBody.classList.remove("hidden");
+        if (toggleBtn) toggleBtn.textContent = "Thu gọn";
+      }
+
+      const headerOffset = 92;
+      const topPos = target.getBoundingClientRect().top + window.scrollY - headerOffset;
+      window.scrollTo({ top: Math.max(0, topPos), behavior: "smooth" });
+
+      target.classList.remove("card-flash");
+      void target.offsetWidth;
+      target.classList.add("card-flash");
+
+      // Đóng mobile drawer nếu đang mở
+      closeMobileDrawer();
+    }
+
+    // Bắt sự kiện click trên mục lục
+    tocNav.addEventListener("click", (e) => {
+      const link = e.target.closest("a[data-target]");
+      if (!link) return;
+      e.preventDefault();
+      jumpToSection(link.dataset.target);
+    });
+
+    // ScrollSpy tự động đánh dấu mục đang đọc trên Sidebar
+    const allSectionTargets = Array.from(document.querySelectorAll(".lesson-section, .question-card"));
+    const scrollTopBtn = document.getElementById("scrollTopBtn");
+
+    window.addEventListener("scroll", () => {
+      const scrollY = window.scrollY;
+
+      // Hiện/ẩn nút cuộn lên đầu trang
+      if (scrollY > 400) {
+        scrollTopBtn.classList.remove("opacity-0", "pointer-events-none");
+      } else {
+        scrollTopBtn.classList.add("opacity-0", "pointer-events-none");
+      }
+
+      // Xác định section đang active
+      let currentId = "";
+      for (const sec of allSectionTargets) {
+        const rect = sec.getBoundingClientRect();
+        if (rect.top <= 140) {
+          currentId = sec.id;
+        } else {
+          break;
+        }
+      }
+
+      if (currentId) {
+        tocNav.querySelectorAll("a[data-target]").forEach((a) => {
+          const isMatch = a.dataset.target === currentId;
+          if (isMatch) {
+            a.classList.add("bg-blue-50", "dark:bg-blue-950/70", "text-blue-600", "dark:text-blue-400", "font-semibold");
+          } else {
+            a.classList.remove("bg-blue-50", "dark:bg-blue-950/70", "text-blue-600", "dark:text-blue-400", "font-semibold");
+          }
+        });
+      }
+    }, { passive: true });
+
+    scrollTopBtn.addEventListener("click", () => {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+
+    // ================= TOGGLE SOLUTIONS (STUDY MODE) =================
+    let allSolutionsVisible = true;
+    const toggleAllSolutionsBtn = document.getElementById("toggleAllSolutionsBtn");
+    const toggleAllLabel = document.getElementById("toggleAllLabel");
+
+    toggleAllSolutionsBtn.addEventListener("click", () => {
+      allSolutionsVisible = !allSolutionsVisible;
+      document.querySelectorAll(".solution-body").forEach((el) => {
+        el.classList.toggle("hidden", !allSolutionsVisible);
+      });
+      document.querySelectorAll(".single-toggle-btn").forEach((btn) => {
+        btn.textContent = allSolutionsVisible ? "Thu gọn" : "Xem giải";
+      });
+      toggleAllLabel.textContent = allSolutionsVisible ? "Ẩn lời giải" : "Hiện lời giải";
+    });
+
+    window.toggleSingleSolution = function(qId) {
+      const sol = document.getElementById(`sol-${qId}`);
+      const card = document.getElementById(qId);
+      const btn = card.querySelector(".single-toggle-btn");
+      if (!sol) return;
+      const isHidden = sol.classList.toggle("hidden");
+      btn.textContent = isHidden ? "Xem giải" : "Thu gọn";
+    };
+
+    // ================= COPY CODE TO CLIPBOARD =================
+    const toast = document.getElementById("toast");
+    let toastTimer = null;
+
+    window.copyCode = function(btn) {
+      const rawCode = btn.dataset.code || "";
+      const textarea = document.createElement("textarea");
+      textarea.value = rawCode;
+      textarea.style.position = "fixed";
+      textarea.style.opacity = "0";
+      document.body.appendChild(textarea);
+      textarea.select();
+      try {
+        document.execCommand("copy");
+        toast.classList.remove("opacity-0");
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => toast.classList.add("opacity-0"), 2000);
+      } catch (err) {
+        console.error("Copy failed", err);
+      }
+      document.body.removeChild(textarea);
+    };
+
+    // ================= DARK MODE & MOBILE DRAWER =================
+    const themeToggleBtn = document.getElementById("themeToggleBtn");
+    if (localStorage.getItem("theme") === "dark" || (!localStorage.getItem("theme") && window.matchMedia("(prefers-color-scheme: dark)").matches)) {
+      document.documentElement.classList.add("dark");
+    }
+
+    themeToggleBtn.addEventListener("click", () => {
+      const isDark = document.documentElement.classList.toggle("dark");
+      localStorage.setItem("theme", isDark ? "dark" : "light");
+    });
+
+    const mobileMenuBtn = document.getElementById("mobileMenuBtn");
+    const closeDrawerBtn = document.getElementById("closeDrawerBtn");
+    const sidebarDrawer = document.getElementById("sidebarDrawer");
+    const drawerBackdrop = document.getElementById("drawerBackdrop");
+
+    function openMobileDrawer() {
+      sidebarDrawer.classList.remove("-translate-x-full");
+      drawerBackdrop.classList.remove("hidden");
+    }
+
+    function closeMobileDrawer() {
+      sidebarDrawer.classList.add("-translate-x-full");
+      drawerBackdrop.classList.add("hidden");
+    }
+
+    mobileMenuBtn.addEventListener("click", openMobileDrawer);
+    closeDrawerBtn.addEventListener("click", closeMobileDrawer);
+    drawerBackdrop.addEventListener("click", closeMobileDrawer);
+  </script>
+</body>
+</html>
